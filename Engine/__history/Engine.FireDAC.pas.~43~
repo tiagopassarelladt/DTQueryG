@@ -1,0 +1,276 @@
+unit Engine.FireDAC;
+
+interface
+
+uses Engine.Interfaces, FireDAC.Comp.Client, System.Classes, Data.DB,
+  FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt, FireDAC.DApt.Intf,
+  FireDAC.Comp.DataSet, FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys,
+  FireDAC.VCLUI.Wait, FireDAC.Phys.FBDef, FireDAC.Phys.PGDef, FireDAC.Phys.MySQLDef,
+  FireDAC.Phys.MySQL, FireDAC.Phys.PG, FireDAC.Phys.IBBase, FireDAC.Phys.FB,
+  FireDAC.Comp.UI;
+
+type
+  TEngineFireDAC = class(TInterfacedObject, IEngineBase)
+  private
+    FConexao: TFDConnection;
+    FQry: TFDQuery;
+    FParams: TParams;
+    FFields: TFields;
+    DesativaTransacao:Boolean;
+  public
+    constructor Create(aConexao: TFDConnection);
+    destructor Destroy; override;
+    class function New(aConexao: TFDConnection): IEngineBase;
+    function SQL: TStrings;
+    function Params: TParams;
+    function ExecSQL: IEngineBase;
+    function DataSet: TDataSet;
+    function Open(aSQL: string): IEngineBase; overload;
+    function Open: IEngineBase; overload;
+    function Close: IEngineBase;
+    function TableName(aValue: string): IEngineBase;
+    function StartTransaction: IEngineBase;
+    function Commit: IEngineBase;
+    function Rollback: IEngineBase;
+    function InTransaction: Boolean;
+    function Eof: boolean;
+    function Next: IEngineBase;
+    function Prior: IEnginebase;
+    function First: IEnginebase;
+    function Last: IEngineBase;
+    function RecordCount: Integer;
+    function Fields: TFields;
+    function FieldByName(const FieldName: string): TField;
+    function isEmpty: Boolean;
+    function Active(value: Boolean): Boolean;
+  end;
+
+implementation
+
+uses
+  System.SysUtils;
+
+{ TEngineFireDAC }
+
+function TEngineFireDAC.Active(value: Boolean): Boolean;
+begin
+FQry.Active := value;
+Result      := value;
+end;
+
+function TEngineFireDAC.Close: IEngineBase;
+begin
+  Result := Self;
+  FQry.Close;
+end;
+
+function TEngineFireDAC.Commit: IEngineBase;
+begin
+  Result := Self;
+  FConexao.Commit;
+end;
+
+constructor TEngineFireDAC.Create(aConexao: TFDConnection);
+begin
+  FConexao := aConexao;
+  FQry := TFDQuery.Create( nil );
+  FQry.Connection := FConexao;
+end;
+
+function TEngineFireDAC.DataSet: TDataSet;
+begin
+  Result := TDataSet( FQry );
+end;
+
+destructor TEngineFireDAC.Destroy;
+begin
+  if FQry.Active then
+    Fqry.Close;
+
+  FreeAndNil( Fqry );
+
+  if Assigned( FParams ) then
+    FreeAndNil( FParams );
+
+  inherited;
+end;
+
+
+function TEngineFireDAC.Eof: boolean;
+begin
+Result := FQry.Eof;
+end;
+
+function TEngineFireDAC.ExecSQL: IEngineBase;
+VAR
+Transac:TFDTransaction;
+begin
+  try
+         if not DesativaTransacao then
+         begin
+             Transac := TFDTransaction.Create(nil);
+             Transac.Connection := FConexao;
+             FConexao.Transaction := Transac;
+             Transac.StartTransaction;
+         end;
+         try
+              Result := Self;
+              FQry.Params.Assign( FParams );
+              FQry.Prepare;
+              FQry.ExecSQL;
+
+              if Assigned( FParams ) then
+                FreeAndNil( FParams );
+
+             if not DesativaTransacao then
+             Transac.Commit;
+         except on e:Exception do
+         begin
+             if not DesativaTransacao then
+             Transac.Rollback;
+
+             raise Exception.Create(e.Message);
+         end;
+         end;
+  finally
+         if not DesativaTransacao then
+         Transac.Free;
+  end;
+end;
+
+function TEngineFireDAC.FieldByName(const FieldName: string): TField;
+begin
+  Result := FQry.FieldByName(FieldName);
+end;
+
+function TEngineFireDAC.Fields: TFields;
+begin
+  Result := FQry.Fields;
+end;
+
+function TEngineFireDAC.First: IEnginebase;
+begin
+ Result := Self;
+ fqry.First;
+end;
+
+function TEngineFireDAC.InTransaction: Boolean;
+begin
+  Result := FConexao.InTransaction;
+end;
+
+function TEngineFireDAC.isEmpty: Boolean;
+begin
+     Result := FQry.IsEmpty;
+end;
+
+function TEngineFireDAC.Last: IEngineBase;
+begin
+  Result := Self;
+  fqry.Last;
+end;
+
+class function TEngineFireDAC.New(aConexao: TFDConnection): IEngineBase;
+begin
+  Result := Self.Create(aConexao);
+end;
+
+function TEngineFireDAC.Next: IEngineBase;
+begin
+  Result := Self;
+  FQry.Next;
+end;
+
+function TEngineFireDAC.Open(aSQL: string): IEngineBase;
+begin
+  Result := Self;
+  FQry.Close;
+  FQry.Open( aSQL );
+end;
+
+function TEngineFireDAC.Open: IEngineBase;
+begin
+  Result := Self;
+  FQry.Close;
+
+  if Assigned( FParams )  then
+    FQry.Params.Assign( FParams );
+
+  FQry.Prepare;
+  FQry.Open();
+
+  if Assigned( FParams ) then
+    FreeAndNil( FParams );
+end;
+
+function TEngineFireDAC.Params: TParams;
+begin
+  if not Assigned(FParams) then
+  begin
+    FParams := TParams.Create( nil );
+    FParams.Assign( FQry.Params );
+  end;
+
+  Result := FParams;
+end;
+
+function TEngineFireDAC.Prior: IEnginebase;
+begin
+   Result := Self;
+   fqry.Prior;
+end;
+
+function TEngineFireDAC.RecordCount: Integer;
+begin
+  Result := FQry.RecordCount;
+end;
+
+function TEngineFireDAC.Rollback: IEngineBase;
+begin
+  Result := Self;
+  FConexao.Rollback;
+end;
+
+function TEngineFireDAC.SQL: TStrings;
+VAR
+Transac:TFDTransaction;
+begin
+     try
+         if not DesativaTransacao then
+         begin
+               Transac := TFDTransaction.Create(nil);
+               Transac.Connection     := FConexao;
+               FConexao.Transaction   := Transac;
+               Transac.StartTransaction;
+         end;
+         try
+             Result := FQry.SQL;
+
+             if not DesativaTransacao then
+             Transac.Commit;
+         except on e:Exception do
+         begin
+             if not DesativaTransacao then
+             Transac.Rollback;
+
+             raise Exception.Create(e.Message);
+         end;
+         end;
+     finally
+         if not DesativaTransacao then
+         Transac.Free;
+     end;
+end;
+
+function TEngineFireDAC.StartTransaction: IEngineBase;
+begin
+  Result := Self;
+  FConexao.StartTransaction;
+end;
+
+function TEngineFireDAC.TableName(aValue: string): IEngineBase;
+begin
+  Result := Self;
+end;
+
+end.

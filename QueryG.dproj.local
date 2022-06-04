@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2021/11/29 12:57:23.000.980,=rtl.dcp</Transaction>
+    <Transaction>2021/11/29 12:57:31.000.728,C:\Users\Tiago Passarella\Documents\Embarcadero\Studio\Projects\Package1.dproj=C:\Users\Tiago Passarella\Documents\Embarcadero\Studio\Projects\QueryG.dproj</Transaction>
+    <Transaction>2021/11/29 12:57:53.000.725,C:\Users\Tiago Passarella\Documents\Embarcadero\Studio\Projects\QueryG.dproj=D:\Dropbox\Componentes\DTQueryG\QueryG.dproj</Transaction>
+    <Transaction>2021/11/29 12:58:31.000.005,=D:\Dropbox\Componentes\DTQueryG\DTQueryG.pas</Transaction>
+    <Transaction>2021/11/29 12:59:55.000.974,=D:\Dropbox\Componentes\DTQueryG\Engine\Engine.FireDAC.pas</Transaction>
+    <Transaction>2021/11/29 12:59:56.000.068,=D:\Dropbox\Componentes\DTQueryG\Engine\Engine.Generica.pas</Transaction>
+    <Transaction>2021/11/29 12:59:56.000.095,=D:\Dropbox\Componentes\DTQueryG\Engine\Engine.RestDataware.pas</Transaction>
+    <Transaction>2021/11/29 12:59:56.000.100,=D:\Dropbox\Componentes\DTQueryG\Engine\Engine.Zeos.pas</Transaction>
+    <Transaction>2021/11/29 12:59:56.000.068,=D:\Dropbox\Componentes\DTQueryG\Engine\Engine.Interfaces.pas</Transaction>
+    <Transaction>2021/11/29 13:55:05.000.152,=D:\Dropbox\Componentes\DTQueryG\Unit1.pas</Transaction>
+    <Transaction>2021/11/29 13:55:31.000.471,D:\Dropbox\Componentes\DTQueryG\Unit1.pas=D:\Dropbox\Componentes\DTQueryG\udm.pas</Transaction>
+    <Transaction>2021/11/29 13:55:31.000.471,D:\Dropbox\Componentes\DTQueryG\Unit1.dfm=D:\Dropbox\Componentes\DTQueryG\udm.dfm</Transaction>
+    <Transaction>2021/11/29 13:56:13.000.856,=ZPlain.dcp</Transaction>
+    <Transaction>2021/11/29 13:56:13.000.677,=dbrtl.dcp</Transaction>
+    <Transaction>2021/11/29 13:56:13.000.739,=vclFireDAC.dcp</Transaction>
+    <Transaction>2021/11/29 13:56:13.000.756,=FireDACCommonDriver.dcp</Transaction>
+    <Transaction>2021/11/29 13:56:13.000.849,=ZDbc.dcp</Transaction>
+    <Transaction>2021/11/29 13:56:13.000.881,=ZParseSql.dcp</Transaction>
+    <Transaction>2021/11/29 13:56:13.000.661,=vcl.dcp</Transaction>
+    <Transaction>2021/11/29 13:56:13.000.802,=FireDACIBDriver.dcp</Transaction>
+    <Transaction>2021/11/29 13:56:13.000.677,=soaprtl.dcp</Transaction>
+    <Transaction>2021/11/29 13:56:13.000.708,=IndySystem.dcp</Transaction>
+    <Transaction>2021/11/29 13:56:13.000.786,=FireDACPgDriver.dcp</Transaction>
+    <Transaction>2021/11/29 13:56:13.000.802,=FireDACMySQLDriver.dcp</Transaction>
+    <Transaction>2021/11/29 13:56:13.000.756,=FireDAC.dcp</Transaction>
+    <Transaction>2021/11/29 13:56:13.000.865,=ZCore.dcp</Transaction>
+    <Transaction>2021/11/29 13:56:13.000.833,=ZComponent.dcp</Transaction>
+    <Transaction>2021/11/29 13:56:13.000.708,=IndyProtocols.dcp</Transaction>
+    <Transaction>2021/11/29 13:56:13.000.692,=inet.dcp</Transaction>
+    <Transaction>2021/11/29 13:56:13.000.818,=RestDatawareCORE.dcp</Transaction>
+    <Transaction>2021/11/29 13:56:13.000.771,=FireDACCommon.dcp</Transaction>
+    <Transaction>2021/11/29 13:56:13.000.724,=IndyCore.dcp</Transaction>
+    <Transaction>2021/11/29 21:33:33.000.178,D:\Dropbox\Componentes\DTQueryG\udm.pas=</Transaction>
+    <Transaction>2021/11/29 21:52:43.000.517,=D:\Dropbox\Componentes\DTQueryG\udm.pas</Transaction>
+    <Transaction>2021/11/29 21:53:27.000.309,D:\Dropbox\Componentes\DTQueryG\udm.pas=</Transaction>
+    <Transaction>2021/11/29 21:56:58.000.640,D:\Dropbox\Componentes\DTQueryG\Engine\Engine.Generica.pas=</Transaction>
+  </Transactions>
+</BorlandProject>

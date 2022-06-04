@@ -1,0 +1,234 @@
+unit Engine.RestDataware;
+
+interface
+
+uses Engine.Interfaces, System.Classes, Data.DB, uDWAbout, uRESTDWPoolerDB;
+
+type
+  TEngineRestDataware = class(TInterfacedObject, IEngineBase)
+  private
+    FConexao: TRESTDWDataBase;
+    FQry: TRESTDWClientSQL;
+    FParams: TParams;
+  public
+    constructor Create(aConexao: TRESTDWDataBase);
+    destructor Destroy; override;
+    class function New(aConexao: TRESTDWDataBase): IEngineBase;
+
+    function SQL: TStrings;
+    function Params: TParams;
+    function ParamByName(const Value: string): TParam;
+    function ExecSQL: IEngineBase;
+    function DataSet: TDataSet;
+    function Open(aSQL: string): IEngineBase; overload;
+    function Open: IEngineBase; overload;
+    function Close: IEngineBase;
+    function TableName(aValue: string): IEngineBase;
+    function StartTransaction: IEngineBase;
+    function Commit: IEngineBase;
+    function Rollback: IEngineBase;
+    function InTransaction: Boolean;
+    function Eof: Boolean;
+    function Next: IEngineBase;
+    function Prior: IEnginebase;
+    function First: IEnginebase;
+    function Last: IEngineBase;
+    function RecordCount: Integer;
+    function Fields: TFields;
+    function FieldByName(const FieldName: string): TField;
+    function isEmpty: Boolean;
+    function Active: Boolean;
+  end;
+
+implementation
+
+uses
+  System.SysUtils;
+
+{ TEngineRestDataware }
+
+
+function TEngineRestDataware.Active: Boolean;
+begin
+FQry.Active := Active;
+result      := Active;
+end;
+
+function TEngineRestDataware.Close: IEngineBase;
+begin
+  Result := Self;
+  FQry.Close;
+end;
+
+function TEngineRestDataware.Commit: IEngineBase;
+begin
+  Result := Self;
+end;
+
+constructor TEngineRestDataware.Create(aConexao: TRESTDWDataBase);
+begin
+  FConexao            := aConexao;
+  FQry                := TRESTDWClientSQL.Create( nil );
+  FQry.DataBase       := FConexao;
+  FQry.AutoCommitData := False;
+  FQry.BinaryRequest  := True;
+  FQry.ReflectChanges := True;
+end;
+
+function TEngineRestDataware.DataSet: TDataSet;
+begin
+  Result := TDataSet( FQry );
+end;
+
+destructor TEngineRestDataware.Destroy;
+begin
+  if FQry.Active then
+    Fqry.Close;
+
+  FreeAndNil( Fqry );
+
+  if Assigned( FParams ) then
+    FreeAndNil( FParams );
+
+  inherited;
+end;
+
+function TEngineRestDataware.Eof: boolean;
+begin
+result := FQry.Eof;
+end;
+
+function TEngineRestDataware.ExecSQL: IEngineBase;
+var
+  lError: String;
+begin
+  Result := Self;
+
+  FQry.Params.Assign( FParams );
+  if not FQry.ExecSQL( lError ) then
+    raise Exception.Create(lError);
+
+  if Assigned( FParams ) then
+    FreeAndNil( FParams );
+end;
+
+function TEngineRestDataware.FieldByName(const FieldName: string): TField;
+begin
+  result := FQry.FieldByName(FieldName);
+end;
+
+function TEngineRestDataware.Fields: TFields;
+begin
+  Result := FQry.Fields;
+end;
+
+function TEngineRestDataware.First: IEnginebase;
+begin
+  Result := Self;
+  fqry.First;
+end;
+
+function TEngineRestDataware.InTransaction: Boolean;
+begin
+  Result := False;
+end;
+
+function TEngineRestDataware.isEmpty: Boolean;
+begin
+    result := fqry.IsEmpty;
+end;
+
+function TEngineRestDataware.Last: IEngineBase;
+begin
+   Result := Self;
+   FQry.Last;
+end;
+
+class function TEngineRestDataware.New(aConexao: TRESTDWDataBase): IEngineBase;
+begin
+  Result := Self.Create( aConexao );
+end;
+
+function TEngineRestDataware.Next: IEngineBase;
+begin
+Result := Self;
+FQry.Next;
+end;
+
+function TEngineRestDataware.Open(aSQL: string): IEngineBase;
+begin
+  Result := Self;
+  FQry.Close;
+  FQry.Open( aSQL );
+end;
+
+function TEngineRestDataware.Open: IEngineBase;
+begin
+  Result := Self;
+  FQry.Close;
+
+  if Assigned( FParams )  then
+    FQry.Params.Assign( FParams );
+
+  FQry.Open();
+
+  if Assigned( FParams ) then
+    FreeAndNil( FParams );
+end;
+
+function TEngineRestDataware.ParamByName(const Value: string): TParam;
+begin
+    if not Assigned(FParams) then
+    begin
+      FParams := TParams.Create( nil );
+      FParams.Assign( FQry.Params );
+    end;
+
+    Result := FParams.ParamByName(Value);
+end;
+
+function TEngineRestDataware.Params: TParams;
+begin
+  if not Assigned(FParams) then
+  begin
+    FParams := TParams.Create( nil );
+    FParams.Assign( FQry.Params );
+  end;
+
+  Result := FParams;
+end;
+
+function TEngineRestDataware.Prior: IEnginebase;
+begin
+   Result := Self;
+   FQry.Prior;
+end;
+
+function TEngineRestDataware.RecordCount: Integer;
+begin
+  result := FQry.RecordCount;
+end;
+
+function TEngineRestDataware.Rollback: IEngineBase;
+begin
+  Result := Self;
+end;
+
+function TEngineRestDataware.SQL: TStrings;
+begin
+  Result := FQry.SQL;
+end;
+
+function TEngineRestDataware.StartTransaction: IEngineBase;
+begin
+  Result := Self;
+end;
+
+function TEngineRestDataware.TableName(aValue: string): IEngineBase;
+begin
+  Result := Self;
+  FQry.UpdateTableName := aValue;
+end;
+
+end.
+

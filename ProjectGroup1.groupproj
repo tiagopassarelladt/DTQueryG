@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{941DB7C9-3EE4-4D91-9D86-4E404BE935C5}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="QueryG.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Demo\Demo.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="QueryG">
+        <MSBuild Projects="QueryG.dproj"/>
+    </Target>
+    <Target Name="QueryG:Clean">
+        <MSBuild Projects="QueryG.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="QueryG:Make">
+        <MSBuild Projects="QueryG.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Demo">
+        <MSBuild Projects="Demo\Demo.dproj"/>
+    </Target>
+    <Target Name="Demo:Clean">
+        <MSBuild Projects="Demo\Demo.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Demo:Make">
+        <MSBuild Projects="Demo\Demo.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="QueryG;Demo"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="QueryG:Clean;Demo:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="QueryG:Make;Demo:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
