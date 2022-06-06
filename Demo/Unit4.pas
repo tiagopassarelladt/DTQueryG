@@ -11,7 +11,8 @@ uses
   FireDAC.Phys.FBDef, FireDAC.VCLUI.Wait, FireDAC.Phys.IBBase,
   FireDAC.Comp.Client, ZAbstractConnection, ZConnection, uDWAbout,
   uRESTDWPoolerDB,UPQuerys, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf,
-  FireDAC.DApt, FireDAC.Comp.DataSet, DTQueryG, Firewall;
+  FireDAC.DApt, FireDAC.Comp.DataSet, DTQueryG, Firewall, DBAccess, Uni,
+  UniProvider, InterBaseUniProvider;
 
 type
   TForm4 = class(TForm)
@@ -26,6 +27,8 @@ type
     ComboBox1: TComboBox;
     RESTDWDataBase1: TRESTDWDataBase;
     DTQueryG1: TDTQueryG;
+    UniConnection1: TUniConnection;
+    InterBaseUniProvider1: TInterBaseUniProvider;
     procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
@@ -51,6 +54,9 @@ begin
          END ELSE if ComboBox1.ItemIndex = 2 then
          begin
               DTQueryG1.TipoConector := tpRDW;
+         END ELSE if ComboBox1.ItemIndex = 3 then
+         begin
+              DTQueryG1.TipoConector := tpUniDAC;
          end;
 
          DataSource1.DataSet := DTQueryG1.DataSet;

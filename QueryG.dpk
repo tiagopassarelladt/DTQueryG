@@ -1,7 +1,7 @@
 package QueryG;
 
 {$R *.res}
-{$R TDTQueryG.dcr}
+{$R 'TDTQueryG.dcr'}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
@@ -49,13 +49,16 @@ requires
   ZDbc,
   ZPlain,
   ZCore,
-  ZParseSql;
+  ZParseSql,
+  unidac260,
+  dac260;
 
 contains
   DTQueryG in 'DTQueryG.pas',
   Engine.FireDAC in 'Engine\Engine.FireDAC.pas',
   Engine.Interfaces in 'Engine\Engine.Interfaces.pas',
   Engine.RestDataware in 'Engine\Engine.RestDataware.pas',
-  Engine.Zeos in 'Engine\Engine.Zeos.pas';
+  Engine.Zeos in 'Engine\Engine.Zeos.pas',
+  Engine.Unidac in 'Engine\Engine.Unidac.pas';
 
 end.

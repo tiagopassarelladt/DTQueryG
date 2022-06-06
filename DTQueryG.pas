@@ -4,13 +4,13 @@ interface
 
 uses
   System.SysUtils, System.Classes, Engine.Interfaces, Data.DB,
-  FireDAC.Comp.Client, ZConnection, uRESTDWPoolerDB;
+  FireDAC.Comp.Client, ZConnection, uRESTDWPoolerDB,Uni;
 
 var
 lconexao:Tcomponent;
 
 type
-  TTipoEngine = (tpRDW, tpFireDAC, tpZeos);
+  TTipoEngine = (tpRDW, tpFireDAC, tpZeos, tpUniDAC);
   TTipoBanco = (tpFB, tpPG, tpMySQL);
 
 type
@@ -40,6 +40,7 @@ type
     FRDWConection: TRESTDWDataBase;
     FireConection: TFDConnection;
     FActive: Boolean;
+    FUniDACConnection: TUniConnection;
     procedure setPassword(const Value: string);
     procedure setUser(const Value: string);
     procedure setPort(const Value: String);
@@ -51,6 +52,7 @@ type
     procedure setFZeosConection(const Value: TZconnection);
     procedure SetActive(const Value: Boolean);
     function Activex(const value:boolean):Boolean;
+    procedure setUniDACConnection(const Value: TUniConnection);
   protected
 
   public
@@ -86,6 +88,7 @@ type
   property FireDACConection:TFDConnection read FireConection write setFireConection;
   property ZeosConection:TZconnection read FZeosConection write setFZeosConection;
   property RDWConnection:TRESTDWDataBase read FRDWConection write setFRDWConection;
+  property UniDACConnection:TUniConnection read FUniDACConnection write setUniDACConnection;
   property Active: Boolean read FActive write SetActive default False;
 
   end;
@@ -95,7 +98,7 @@ procedure Register;
 implementation
 
 uses
-  Engine.FireDAC, Engine.Zeos,
+  Engine.FireDAC, Engine.Zeos, Engine.Unidac,
   Engine.RestDataware;
 
 procedure Register;
@@ -124,11 +127,6 @@ end;
 constructor TDTQueryG.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-//  FUser             := 'SYSDBA';
-//  FPassword         := 'masterkey';
-//  FPot              := '3050';
-//  FDataBase         := 'C:\SUPERSYS10\DADOS\SUPERSYS.FDB';
-//  FCaminhoVendorLib := 'C:\SUPERSYS10\FBCLIENT.DLL';
 end;
 
 function TDTQueryG.DataSet: TDataSet;
@@ -179,6 +177,9 @@ begin
   end else if FTipoConector = tpRDW then
   begin
        lConexao := FRDWConection;
+  end else if FTipoConector = tpUniDAC then
+  begin
+       lConexao := FUniDACConnection;
   end;
   FQryG         := TEngine.New(lConexao).Qry;
 end;
@@ -292,6 +293,11 @@ begin
   GetTipoConexao;
 end;
 
+procedure TDTQueryG.setUniDACConnection(const Value: TUniConnection);
+begin
+  FUniDACConnection := Value;
+end;
+
 procedure TDTQueryG.setUser(const Value: string);
 begin
   FUser := Value;
@@ -321,6 +327,8 @@ begin
     FQry := TEngineFireDAC.New( lConexao as TFDConnection )
   else if ( lConexao is TRESTDWDataBase ) then
     FQry := TEngineRestDataware.New( lConexao as TRESTDWDataBase )
+  else if ( lConexao is TUniConnection ) then
+    FQry := TEngineUnidac.New( lConexao as TUniConnection )
   else if ( lConexao is TZConnection ) then
     FQry := TEngineZeos.New( lConexao as TZConnection );
 end;

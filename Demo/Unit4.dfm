@@ -70,7 +70,8 @@ object Form4: TForm4
     Items.Strings = (
       '1 - FIREDAC'
       '2 - ZEOS'
-      '3 - RESTDATAWARE')
+      '3 - RESTDATAWARE'
+      '4 - UNIDAC')
   end
   object DataSource1: TDataSource
     Left = 152
@@ -145,7 +146,22 @@ object Form4: TForm4
     FireDACConection = FDConnection1
     ZeosConection = ZConnection1
     RDWConnection = RESTDWDataBase1
+    UniDACConnection = UniConnection1
     Left = 80
+    Top = 112
+  end
+  object UniConnection1: TUniConnection
+    ProviderName = 'InterBase'
+    Database = 'c:\supersys10\dados\supersys.fdb'
+    Username = 'SYSDBA'
+    Server = 'localhost'
+    LoginPrompt = False
+    Left = 600
+    Top = 112
+    EncryptedPassword = '92FF9EFF8CFF8BFF9AFF8DFF94FF9AFF86FF'
+  end
+  object InterBaseUniProvider1: TInterBaseUniProvider
+    Left = 688
     Top = 112
   end
 end
